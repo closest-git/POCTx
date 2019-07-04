@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="55c9131d-1cb9-459f-b2de-fc5075679b34" name="Default Changelist" comment="" />
+    <list default="true" id="55c9131d-1cb9-459f-b2de-fc5075679b34" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Correlation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GBDT.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/InHospital.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TumorMarkers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DetectionSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/DetectionSet.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -10,68 +18,75 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DetectionSet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="50" selection-start-line="50" selection-end-line="50" />
+            <state relative-caret-position="141">
+              <caret line="12" selection-start-line="12" selection-end-line="12" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#1410#1657#0" />
+                <element signature="e#3027#3226#0" />
+                <element signature="e#3286#4151#0" />
+                <element signature="e#4232#6359#0" />
+                <element signature="e#6426#9102#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://D:/anaconda3/Lib/site-packages/pandas/core/dtypes/cast.py">
+        <entry file="file://$PROJECT_DIR$/InHospital.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Correlation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="701" selection-start-line="701" selection-end-line="701" />
+            <state relative-caret-position="133">
+              <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/GBDT.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="17" column="71" selection-start-line="17" selection-start-column="71" selection-end-line="17" selection-end-column="71" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://D:/anaconda3/Lib/site-packages/pandas/core/internals/blocks.py">
+        <entry file="file://D:/anaconda3/Lib/site-packages/sklearn/metrics/ranking.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1481">
-              <caret line="632" selection-start-line="632" selection-end-line="632" />
+            <state relative-caret-position="192">
+              <caret line="539" lean-forward="true" selection-start-line="539" selection-end-line="539" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://D:/anaconda3/Lib/site-packages/PIL/Image.py">
+        <entry file="file://D:/anaconda3/Lib/site-packages/numpy/core/fromnumeric.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="37962">
-              <caret line="2003" selection-start-line="2003" selection-end-line="2003" />
+            <state relative-caret-position="119">
+              <caret line="2512" column="4" selection-start-line="2512" selection-start-column="4" selection-end-line="2512" selection-end-column="4" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://D:/anaconda3/Lib/site-packages/scipy/stats/stats.py">
+        <entry file="file://$PROJECT_DIR$/TumorMarkers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32737">
-              <caret line="1740" selection-start-line="1740" selection-end-line="1740" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://D:/anaconda3/Lib/site-packages/seaborn/axisgrid.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3876">
-              <caret line="219" column="47" selection-start-line="219" selection-start-column="47" selection-end-line="219" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://D:/anaconda3/Lib/site-packages/pandas/core/indexing.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23427">
-              <caret line="1251" selection-start-line="1251" selection-end-line="1251" />
+            <state relative-caret-position="96">
+              <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -118,30 +133,43 @@
       <find>pickle_path</find>
       <find>astyp</find>
       <find>testing_index</find>
+      <find>version</find>
+      <find>markers</find>
+      <find>return</find>
+      <find>tumor_markers</find>
+      <find>ROC_plot</find>
+      <find>id</find>
     </findStrings>
     <dirStrings>
       <dir>E:\POCTx</dir>
     </dirStrings>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/TumorMarkers.py" />
+        <option value="$PROJECT_DIR$/Correlation.py" />
+        <option value="$PROJECT_DIR$/InHospital.py" />
         <option value="$PROJECT_DIR$/DetectionSet.py" />
+        <option value="$PROJECT_DIR$/GBDT.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="y" value="-10" />
-    <option name="width" value="1805" />
-    <option name="height" value="1100" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1802" />
+    <option name="height" value="1098" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -153,9 +181,11 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -173,7 +203,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.DetectionSet">
     <configuration name="DetectionSet" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="POCTx" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -196,9 +226,55 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="GBDT" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="POCTx" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GBDT.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TumorMarkers" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="POCTx" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TumorMarkers.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.DetectionSet" />
+        <item itemvalue="Python.GBDT" />
+        <item itemvalue="Python.TumorMarkers" />
       </list>
     </recent_temporary>
   </component>
@@ -215,22 +291,23 @@
       <workItem from="1561772843766" duration="19179000" />
       <workItem from="1562141486137" duration="667000" />
       <workItem from="1562147637298" duration="2251000" />
+      <workItem from="1562203021263" duration="8775000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22097000" />
+    <option name="totallyTimeSpent" value="30872000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1441" height="878" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4966533" visible="true" weight="0.18582791" />
-      <window_info id="Structure" order="1" sideWeight="0.50334674" side_tool="true" visible="true" weight="0.18582791" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4950495" visible="true" weight="0.1945047" />
+      <window_info id="Structure" order="1" sideWeight="0.5049505" side_tool="true" visible="true" weight="0.1945047" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.36680055" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.43373495" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.27479893" />
+      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.3230563" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -243,7 +320,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.41720897" />
+      <window_info active="true" anchor="right" id="SciView" order="3" visible="true" weight="0.5849602" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -255,36 +332,42 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DetectionSet.py</url>
-          <line>105</line>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/DetectionSet.py</url>
-          <line>63</line>
+          <line>60</line>
           <option name="timeStamp" value="60" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DetectionSet.py</url>
-          <line>125</line>
+          <line>150</line>
           <option name="timeStamp" value="64" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/DetectionSet.py</url>
-          <line>270</line>
-          <option name="timeStamp" value="70" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/DetectionSet.py</url>
-          <line>50</line>
-          <option name="timeStamp" value="71" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="self.tumor_markers" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/POCTx$DetectionSet.coverage" NAME="DetectionSet Coverage Results" MODIFIED="1562149211582" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/POCTx$TumorMarkers.coverage" NAME="TumorMarkers Coverage Results" MODIFIED="1562205806333" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/POCTx$GBDT.coverage" NAME="GBDT Coverage Results" MODIFIED="1562211739432" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/POCTx$DetectionSet.coverage" NAME="DetectionSet Coverage Results" MODIFIED="1562212862310" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://D:/anaconda3/Lib/site-packages/pandas/core/dtypes/cast.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12863">
+          <caret line="701" selection-start-line="701" selection-end-line="701" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/anaconda3/Lib/site-packages/pandas/core/internals/blocks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11153">
+          <caret line="632" selection-start-line="632" selection-end-line="632" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://D:/anaconda3/Lib/site-packages/PIL/Image.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="37962">
@@ -334,26 +417,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/anaconda3/Lib/site-packages/pandas/core/internals/blocks.py">
+    <entry file="file://D:/anaconda3/Lib/site-packages/numpy/core/fromnumeric.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1481">
-          <caret line="632" selection-start-line="632" selection-end-line="632" />
+        <state relative-caret-position="119">
+          <caret line="2512" column="4" selection-start-line="2512" selection-start-column="4" selection-end-line="2512" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/anaconda3/Lib/site-packages/pandas/core/dtypes/cast.py">
+    <entry file="file://$PROJECT_DIR$/TumorMarkers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="701" selection-start-line="701" selection-end-line="701" />
+        <state relative-caret-position="96">
+          <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/InHospital.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Correlation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/anaconda3/Lib/site-packages/sklearn/metrics/ranking.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="539" lean-forward="true" selection-start-line="539" selection-end-line="539" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DetectionSet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
+        <state relative-caret-position="141">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#1410#1657#0" />
+            <element signature="e#3027#3226#0" />
+            <element signature="e#3286#4151#0" />
+            <element signature="e#4232#6359#0" />
+            <element signature="e#6426#9102#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GBDT.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="17" column="71" selection-start-line="17" selection-start-column="71" selection-end-line="17" selection-end-column="71" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
           </folding>
         </state>
       </provider>

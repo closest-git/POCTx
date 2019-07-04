@@ -4,16 +4,13 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 myfont = FontProperties(fname=r'C:\Windows\Fonts\simhei.ttf', size=14)
-from sklearn.metrics import mean_absolute_error,mean_squared_error
 import numpy as np
 import os
 from datetime import datetime
 import time
 import pickle
-import lightgbm as lgb
-from sklearn.model_selection import StratifiedKFold, KFold, RepeatedKFold
-
-isMORT=False
+from TumorMarkers import *
+from GBDT import *
 
 class DetectionSet:
     def __init__(self):
@@ -21,20 +18,20 @@ class DetectionSet:
 
 class TumorSamples(DetectionSet):
     def __init__(self, config, xls_path):
-        self.version="v0.2"
         self.config=config
-        markers = config.tumor_markers.marker_dict
-        self.testing_index = list(markers.keys())
-        self.pkl_path="./data/TumorSamples_{}_.pickle".format(self.version)
-
+        source = self.config.data_source
+        tumor_markers = config.tumor_markers        #可能会被修改
+        self.pkl_path="./data/TumorSamples_{}_.pickle".format(source)
         if os.path.isfile(self.pkl_path):
             pass
         else:
             self.scan_xls_path(config, xls_path)
+
         print("\n======load pickle file from {} ...".format(self.pkl_path))
         with open(self.pkl_path, "rb") as fp:  # Pickling
-            [self.df] = pickle.load(fp)
-        print("===============df={}\n{}".format(self.df.shape, self.df.head()))
+            [self.df,self.tumor_markers] = pickle.load(fp)
+        self.testing_index = list(self.tumor_markers.marker_dict.keys())
+        print("===============df={} tumor_markers={}\n{}".format(self.df.shape,self.testing_index, self.df.head()))
         self.testing_index = list(set(self.testing_index) & set(self.df.columns))
         print("===============testing_index={}".format(self.testing_index))
 
@@ -79,8 +76,51 @@ class TumorSamples(DetectionSet):
             plt.show()
             nz=nz+1
 
+    def OnAge(self,age):
+        if age == "未知":
+            return None
+        if '天' in age or '月' in age:
+            age = 0.0
+        else:
+            age = age.replace("岁", "")
+            age = float(age)
+        return age
+
+    def OnTect(self,tect_str):
+        source = self.config.data_source
+        markers = self.tumor_markers.marker_dict
+        k_id, k_val = None,None
+        tect_tokens = tect_str.strip( ).split(' ')
+        tect={}
+        if len(tect_tokens)!=2:
+            return k_id, k_val
+        try:
+            k_id,k_val=tect_tokens[0],(float)(tect_tokens[1])
+        except:
+            return k_id, k_val
+        isUpdate = source == "LSW"
+        if k_id not in markers:
+            if isUpdate:     #允许添加
+                markers[k_id]={"样本量":1.,	"平均值":0.,	"中值":0.,	"标准差":0.,	"变异系数":0.,
+                               "方差":0.,	"最小值":k_val,	"最大值":k_val}
+
+            else:
+                pass
+        else:
+            if isUpdate:
+                markers[k_id]["样本量"] = markers[k_id]["样本量"]+1
+                markers[k_id]["最小值"] = min((markers[k_id]["最小值"]),k_val)
+                markers[k_id]["最大值"] = max((markers[k_id]["最大值"]),k_val)
+        return k_id,k_val
+
     def scan_xls_path(self,config, xls_path):
-        markers = config.tumor_markers.marker_dict
+        source = config.data_source
+        self.tumor_markers = config.tumor_markers
+        if source == "LSW":
+            date_format = '%Y/%m/%d'
+        else:
+            date_format = '%Y-%m-%d'
+
         nz,extensions = 0,['.xls']
         files = os.listdir(xls_path)
         samples={}
@@ -89,53 +129,39 @@ class TumorSamples(DetectionSet):
             name, extension = os.path.splitext(file)
             if extension not in extensions:            continue
             df = pd.read_excel("{}{}".format(xls_path,file), usecols ='B:D,F:G,M',dtype=str)
+            nRow, nSample = 0, 0
             for index, row in df.iterrows():
+                nRow=nRow+1
                 id,tect_str,sex,age,time_str=row['病人ID'],row['ID类型'],row['性别'],row['年龄'],row['报告时间']
-                if age=="未知":
-                    continue
-                if '天' in age or '月' in age:
-                    age=0.0
-                else:
-                    age = age.replace("岁", "")
-                    age = float(age)
+                age = self.OnAge(age)
+                if age == None:     continue
                 if sex == "女":
                     sex = "F"
                 elif sex == "男":
                     sex = "M"
                 else:
                     continue
-                tect_tokens = tect_str.strip( ).split(' ')
-                tect={}
-                if len(tect_tokens)==2:
-                    try:
-                        k_id,k_val=tect_tokens[0],(float)(tect_tokens[1])
-                    except:
-                        continue
-                    if k_id not in markers:
-                        continue
-                else:
-                    continue
+                k_id,k_val = self.OnTect(tect_str)
+                if k_id is None:        continue
                 try:
-                    if self.version=="v0.2":
-                        date = datetime.strptime(time_str, '%Y/%m/%d')
-                    else:
-                        date = datetime.strptime(time_str, '%Y-%m-%d')
+                    date = datetime.strptime(time_str, date_format)
                 except:
-                    print("failed to parse date@{}".format(time_str))
+                    #print("failed to parse date@{}".format(time_str))
                     if time_str is not np.nan:
                         continue
                 if (id, date) not in samples:
                     samples[(id, date)] = {'sex':sex,'age':age}
                 samples[(id, date)][k_id]=k_val
-                nz = nz + 1
+                nz = nz + 1;    nSample=nSample+1
                 if nz%1000==0:
                     print("{}\tnItem={} time={:.3g}".format(nz,len(samples),time.time()-t0))
                     #break
+            print("====== nRow={} nSample={} @\"{}\"......".format(nRow,nSample,file))
         df = pd.DataFrame.from_dict(samples, orient='index').reset_index()
         df = df.rename(columns={ df.columns[0]: "id",df.columns[1]: "date" }).sort_values('date')
         print ("===============df={}\n{}".format(df.shape,df.head()))
         with open(self.pkl_path, "wb") as fp:  # Pickling
-            pickle.dump([df], fp)
+            pickle.dump([df,self.tumor_markers], fp)
         pass
 
     def Split(self,target="age"):
@@ -150,19 +176,17 @@ class TumorSamples(DetectionSet):
 
         pass
 
+    def HospitalOnID(self):
+        df_valid = self.df[self.df['id'].notnull()].reset_index(drop=True)
+        print("df_valid=[{}]".format(df_valid.shape))
+        df_valid['in_hospital'] = df_valid.apply(lambda x: len(x['id'])<=6, axis=1)
+        self.y = df_valid['in_hospital'].astype(np.int)
 
-class TumorMarkers(DetectionSet):
-    def __init__(self,config,xls_path):
-
-        self.df = pd.read_excel(xls_path)
-        self.df.set_index('项目代码',inplace=True)
-        nMark=self.df.shape[0]-1
-        self.marker_dict = self.df[0:nMark].to_dict(orient='index')
-        if False:
-            import pprint
-            pprint.pprint(markers)
-        else:
-            print("{" + "\n".join("{}: {}".format(k, v) for k, v in self.marker_dict.items()) + "}")
+        cols = df_valid.columns
+        x_cols = [e for e in cols if e not in ('id', 'date', 'sex','in_hospital')]
+        self.X = df_valid[x_cols].astype(np.float)
+        self.X['sex'] = df_valid['sex'].astype('category')
+        print("HospitalOnID X=[{}],y={}".format(self.X.shape,self.y.shape ))
         return
 
 def arg_parser():
@@ -209,71 +233,21 @@ def arg_parser():
     print(parser)
     return parser
 
-def runLgb(X, y, test=None, num_rounds=1000, max_depth=1, eta=0.5, subsample=0.8,
-           colsample=0.8, min_child_weight=1, early_stopping_rounds=50, seeds_val=2017):
-    print("X={} y={}".format(X.shape,y.shape))
-    param = {'task': 'train',
-             'min_data_in_leaf': 32,
-             'boosting_type': 'gbdt',
-             'objective': 'regression',
-             'learning_rate': eta,
-             # 'metric': {'multi_logloss'},
-             'metric': 'mae',
-             'max_depth': max_depth,
-             # 'min_child_weight':min_child_weight,
-             'bagging_fraction': subsample,
-             'feature_fraction': colsample,
-             'bagging_seed': seeds_val,
-             'num_iterations': num_rounds,
-             'num_leaves': 2,
-             'min_data_in_leaf': 60,
-             'lambda_l1': 1.0,
-             'verbose': 0,
-             'nthread': -1}
-    n_fold = 5
-    folds = KFold(n_splits=n_fold, shuffle=True, random_state=11)
-    for fold_n, (train_index, valid_index) in enumerate(folds.split(X)):
-        t0 = time.time()
-
-        if type(X) == np.ndarray:
-            X_train, X_valid = X[train_index], X[valid_index]
-            y_train, y_valid = y[train_index], y[valid_index]
-        else:
-            X_train, X_valid = X.iloc[train_index], X.iloc[valid_index]
-            y_train, y_valid = y.iloc[train_index], y.iloc[valid_index]
-
-        if isMORT:
-            # model = LiteMORT(params).fit(X_train, y_train, eval_set=[(X_valid, y_valid)])
-            # model = LiteMORT(param).fit_1(Xtr, ytr, eval_set=[(Xvl, yvl)])
-            pass
-        else:
-            lgtrain = lgb.Dataset(X_train, y_train)
-            lgval = lgb.Dataset(X_valid, y_valid)
-            model = lgb.train(param, lgtrain, num_rounds, valid_sets=lgval,
-                              early_stopping_rounds=early_stopping_rounds, verbose_eval=100)
-        pred_val = model.predict(X_valid, num_iteration=model.best_iteration)
-        fold_score = mean_absolute_error(pred_val, y_valid)
-        if test is not None:
-            pred_test = model.predict(test, num_iteration=model.best_iteration)
-        else:
-            pred_test = None
-        break
-    return fold_score
+def InHospital(samples):
+    samples.HospitalOnID( )
+    score = runLgb(samples.X, samples.y)
 
 def main():
     global args
     args = arg_parser()
-    markers = TumorMarkers(args, "./data/肿瘤标志物.xls")
+    args.data_source = "LSW"
+    markers = TumorMarkers(args, None if args.data_source == "LSW" else "./data/肿瘤标志物.xls")
     args.tumor_markers = markers
     #samples = TumorSamples(args,"./data/蛋白检测样本/")
     samples = TumorSamples(args, "./data/LSW/")
-    samples.EDA()
-    results={}
-    for index in samples.testing_index:
-        samples.Split(target=index)
-        score = runLgb(samples.X, samples.y)
-        results[index]=score
-    print(results)
+    #samples.EDA()
+    InHospital(samples)
+
     os._exit(-1)
 
 
