@@ -6,6 +6,9 @@ import time
 import numpy as np
 isMORT=False
 import matplotlib.pyplot as plt
+import pandas as pd
+import gc
+import seaborn as sns
 
 def ROC_plot(features,X_,y_, pred_,title):
     fpr_, tpr_, _ = roc_curve(y_, pred_)
@@ -18,9 +21,11 @@ def ROC_plot(features,X_,y_, pred_,title):
     plt.title('SMPLEs={} Features={}'.format(X_.shape[0],len(features)))
     plt.legend(loc='best')
     plt.show()
+    return auc_
 
 def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=0.8,
            colsample=0.8, min_child_weight=1, early_stopping_rounds=50, seeds_val=2017):
+    plot_feature_importance = True
     features = list(X.columns)
     print("X={} y={}".format(X.shape,y.shape))
     param = {'task': 'train',
@@ -43,6 +48,9 @@ def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=
     n_fold = 5
     folds = KFold(n_splits=n_fold, shuffle=True, random_state=11)
     y_pred=np.zeros(y.shape[0])
+    feature_importance = None
+    if not isMORT:
+        feature_importance = pd.DataFrame()
     for fold_n, (train_index, valid_index) in enumerate(folds.split(X)):
         t0 = time.time()
 
@@ -62,6 +70,11 @@ def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=
             lgval = lgb.Dataset(X_valid, y_valid)
             model = lgb.train(param, lgtrain, num_rounds, valid_sets=lgval,
                               early_stopping_rounds=early_stopping_rounds, verbose_eval=100)
+            fold_importance = pd.DataFrame()
+            fold_importance["feature"] = X.columns
+            fold_importance["importance"] = model.feature_importance()
+            fold_importance["fold"] = fold_n + 1
+            feature_importance = pd.concat([feature_importance, fold_importance], axis=0)
         pred_val = model.predict(X_valid, num_iteration=model.best_iteration)
         y_pred[valid_index] = pred_val
 
@@ -69,8 +82,20 @@ def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=
             pred_test = model.predict(test, num_iteration=model.best_iteration)
         else:
             pred_test = None
+    auc = roc_auc_score(y, y_pred)
+    if feature_importance is not None:
+        feature_importance["importance"] /= n_fold
+        if plot_feature_importance:
+            cols = feature_importance[["feature", "importance"]].groupby("feature").mean().sort_values(
+                by="importance", ascending=False)[:].index
+            best_features = feature_importance.loc[feature_importance.feature.isin(cols)]
+            plt.figure(figsize=(5, 3));
+            sns.barplot(x="importance", y="feature", data=best_features.sort_values(by="importance", ascending=False))
+            plt.xlabel("importance of each feature")
+            plt.title('AUC={:.3f} ({}-folds)'.format(auc,n_fold));
+            plt.show()
 
     ROC_plot(features,X, y, y_pred, "")
-    cv_score = 0    #roc_auc_score(target, oof)
-    print("CV score: {:<8.5f}".format(cv_score))
-    return cv_score
+
+    print("CV score: {:<8.5f}".format(auc))
+    return auc

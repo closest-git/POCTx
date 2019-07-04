@@ -45,14 +45,18 @@ class TumorSamples(DetectionSet):
 
     def EDA(self):
         if True:
+            self.df = self.df[self.df['id'].notnull()].reset_index(drop=True)
             self.df.fillna(0.0, inplace=True)
+            self.df['in_hospital'] = self.df.apply(lambda x: len(x['id']) <= 6, axis=1)
+            print(self.df['in_hospital'].value_counts())
             for col in self.df.columns:
-                if col in ['id','date','sex']:
+                if col in ['id','date','sex','in_hospital']:
                     continue
-                self.df[col] = self.df[col].astype(np.float)
-                sns.FacetGrid(self.df, hue="sex", height=5).map(sns.distplot, col).add_legend();
 
-                path = "./result/dist_{}.jpg".format(col.replace('/' , '_'))
+                self.df[col] = self.df[col].astype(np.float)
+                sns.FacetGrid(self.df, hue="in_hospital", height=5).map(sns.distplot, col).add_legend();
+                #sns.distplot(self.df[col],kde=False )
+                path = "./result/hospital_{}.jpg".format(col.replace('/' , '_'))
                 plt.savefig(path)
                 plt.show();
             return
@@ -101,17 +105,32 @@ class TumorSamples(DetectionSet):
         isUpdate = source == "LSW"
         if k_id not in markers:
             if isUpdate:     #允许添加
-                markers[k_id]={"样本量":1.,	"平均值":0.,	"中值":0.,	"标准差":0.,	"变异系数":0.,
+                markers[k_id]={"样本量":1,	"平均值":0.,	"中值":0.,	"标准差":0.,	"变异系数":0.,
                                "方差":0.,	"最小值":k_val,	"最大值":k_val}
 
             else:
                 pass
         else:
             if isUpdate:
-                markers[k_id]["样本量"] = markers[k_id]["样本量"]+1
+                markers[k_id]["样本量"] = (int)(markers[k_id]["样本量"]+1)
                 markers[k_id]["最小值"] = min((markers[k_id]["最小值"]),k_val)
                 markers[k_id]["最大值"] = max((markers[k_id]["最大值"]),k_val)
         return k_id,k_val
+
+    def markers_stat(self,df):
+        markers = self.tumor_markers.marker_dict
+        for key,info in markers.items():
+            feat = df[df[key].notnull()][key]
+            markers[key]['样本量'] = len(feat)     #有重复啊
+            markers[key]['平均值'] = feat.mean()
+            markers[key]['中值'] = feat.median()
+            markers[key]['方差'] = feat.var()
+            markers[key]['标准差'] = feat.std()
+            markers[key]['变异系数'] = feat.skew()
+
+        df_markers = pd.DataFrame.from_dict(markers, orient='index')
+        df_markers.to_excel("./data/tumor_marks_{}_.xls".format(len(markers)))
+        print(df_markers)
 
     def scan_xls_path(self,config, xls_path):
         source = config.data_source
@@ -141,6 +160,7 @@ class TumorSamples(DetectionSet):
                     sex = "M"
                 else:
                     continue
+
                 k_id,k_val = self.OnTect(tect_str)
                 if k_id is None:        continue
                 try:
@@ -157,7 +177,10 @@ class TumorSamples(DetectionSet):
                     print("{}\tnItem={} time={:.3g}".format(nz,len(samples),time.time()-t0))
                     #break
             print("====== nRow={} nSample={} @\"{}\"......".format(nRow,nSample,file))
+            #break
         df = pd.DataFrame.from_dict(samples, orient='index').reset_index()
+        if source == "LSW":
+            self.markers_stat(df)
         df = df.rename(columns={ df.columns[0]: "id",df.columns[1]: "date" }).sort_values('date')
         print ("===============df={}\n{}".format(df.shape,df.head()))
         with open(self.pkl_path, "wb") as fp:  # Pickling
@@ -183,7 +206,8 @@ class TumorSamples(DetectionSet):
         self.y = df_valid['in_hospital'].astype(np.int)
 
         cols = df_valid.columns
-        x_cols = [e for e in cols if e not in ('id', 'date', 'sex','in_hospital')]
+        x_cols = [e for e in cols if e not in ('id', 'date', 'sex', 'in_hospital')]
+                                               #'PSA','NSE','CA211','HE4','AFP.','SCCA','CA153','CA724')]
         self.X = df_valid[x_cols].astype(np.float)
         self.X['sex'] = df_valid['sex'].astype('category')
         print("HospitalOnID X=[{}],y={}".format(self.X.shape,self.y.shape ))
