@@ -12,18 +12,21 @@ import gc
 import seaborn as sns
 
 def ROC_plot(features,X_,y_, pred_,title):
-    fpr_, tpr_, _ = roc_curve(y_, pred_)
+    fpr_, tpr_, thresholds = roc_curve(y_, pred_)
+    optimal_idx = np.argmax(tpr_ - fpr_)
+#https://stackoverflow.com/questions/28719067/roc-curve-and-cut-off-point-python
+    optimal_threshold = thresholds[optimal_idx]
     auc_ = auc(fpr_, tpr_)
     title = "{} auc=".format(title)
-    print("{} auc={} ".format(title, auc_))
+    print("{} auc={} OT={:.4g}".format(title, auc_,optimal_threshold))
     plt.plot(fpr_, tpr_, label="{}:{:.4g}".format(title, auc_))
     plt.xlabel('False positive rate')
     plt.ylabel('True positive rate')
-    plt.title('SMPLEs={} Features={}'.format(X_.shape[0],len(features)))
+    plt.title('SMPLEs={} Features={} OT={:.4g}'.format(X_.shape[0],len(features),optimal_threshold))
     plt.legend(loc='best')
     plt.savefig("./result/_auc_[{}].jpg".format(features))
     plt.show()
-    return auc_
+    return auc_,optimal_threshold
 
 def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=0.8,
            colsample=0.8, min_child_weight=1, early_stopping_rounds=50, seeds_val=2017):
@@ -78,7 +81,7 @@ def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=
             feature_importance = pd.concat([feature_importance, fold_importance], axis=0)
         pred_val = model.predict(X_valid)
         y_pred[valid_index] = pred_val
-
+        model.save_model(f'model_lgb_poct_{fold_n}_.txt')
         if test is not None:
             pred_test = model.predict(test, num_iteration=model.best_iteration)
         else:

@@ -1,5 +1,8 @@
 import argparse
 import pandas as pd
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
@@ -31,7 +34,7 @@ class TumorSamples(DetectionSet):
         with open(self.pkl_path, "rb") as fp:  # Pickling
             [self.df,self.tumor_markers] = pickle.load(fp)
         self.testing_index = list(self.tumor_markers.marker_dict.keys())
-        print("===============df={} tumor_markers={}\n{}".format(self.df.shape,self.testing_index, self.df.head()))
+        print("===============df={} tumor_markers={}\n{}".format(self.df.shape,self.testing_index, self.df.head(20)))
         self.testing_index = list(set(self.testing_index) & set(self.df.columns))
         print("===============testing_index={}".format(self.testing_index))
 
@@ -208,16 +211,16 @@ class TumorSamples(DetectionSet):
         self.y = df_valid['in_hospital'].astype(np.int)
 
         cols = df_valid.columns
-        #x_cols = [e for e in cols if e not in ('id', 'date', 'sex', 'in_hospital')]
+        x_cols = [e for e in cols if e not in ('id', 'date', 'sex', 'in_hospital')]
         #sugestion by Dr.Lin
         #x_cols = [e for e in cols if e in ('age', 'CA199','CYFRA211', 'AFP.')]
-        x_cols = [e for e in cols if e in ('age', 'CA199', 'CA125', 'CYFRA211', 'PSA', 'NSE')]
+        #x_cols = [e for e in cols if e in ('age', 'CA199', 'CA125', 'CYFRA211', 'PSA', 'NSE')]
 
 
         self.X = df_valid[x_cols].astype(np.float)
         #self.X['sex'] = df_valid['sex'].astype('category')
         self.X['sex'] = df_valid.apply(lambda x: 0 if x['sex']=='M' else 1, axis=1)
-        print("HospitalOnID X=[{}],y={}".format(self.X.shape,self.y.shape ))
+        print("HospitalOnID X=[{}],{}\ny={}".format(self.X.shape,self.X.head(),self.y.shape ))
         return
 
 def arg_parser():
