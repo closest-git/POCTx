@@ -4,6 +4,7 @@ from sklearn.metrics import mean_absolute_error,mean_squared_error
 from sklearn.metrics import roc_auc_score, roc_curve,auc
 import time
 import numpy as np
+from litemort import *
 isMORT=False
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -20,6 +21,7 @@ def ROC_plot(features,X_,y_, pred_,title):
     plt.ylabel('True positive rate')
     plt.title('SMPLEs={} Features={}'.format(X_.shape[0],len(features)))
     plt.legend(loc='best')
+    plt.savefig("./result/_auc_[{}].jpg".format(features))
     plt.show()
     return auc_
 
@@ -28,7 +30,7 @@ def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=
     plot_feature_importance = True
     features = list(X.columns)
     print("X={} y={}".format(X.shape,y.shape))
-    param = {'task': 'train',
+    params = {'task': 'train',
              'min_data_in_leaf': 32,
              'boosting_type': 'gbdt',
              'objective': 'binary',
@@ -62,20 +64,19 @@ def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=
             y_train, y_valid = y.iloc[train_index], y.iloc[valid_index]
 
         if isMORT:
-            # model = LiteMORT(params).fit(X_train, y_train, eval_set=[(X_valid, y_valid)])
-            # model = LiteMORT(param).fit_1(Xtr, ytr, eval_set=[(Xvl, yvl)])
+            model = LiteMORT(params).fit(X_train, y_train, eval_set=[(X_valid, y_valid)])
             pass
         else:
             lgtrain = lgb.Dataset(X_train, y_train)
             lgval = lgb.Dataset(X_valid, y_valid)
-            model = lgb.train(param, lgtrain, num_rounds, valid_sets=lgval,
+            model = lgb.train(params, lgtrain, num_rounds, valid_sets=lgval,
                               early_stopping_rounds=early_stopping_rounds, verbose_eval=100)
             fold_importance = pd.DataFrame()
             fold_importance["feature"] = X.columns
             fold_importance["importance"] = model.feature_importance()
             fold_importance["fold"] = fold_n + 1
             feature_importance = pd.concat([feature_importance, fold_importance], axis=0)
-        pred_val = model.predict(X_valid, num_iteration=model.best_iteration)
+        pred_val = model.predict(X_valid)
         y_pred[valid_index] = pred_val
 
         if test is not None:
@@ -92,7 +93,8 @@ def runLgb(X, y, test=None, num_rounds=10000, max_depth=-1, eta=0.01, subsample=
             plt.figure(figsize=(5, 3));
             sns.barplot(x="importance", y="feature", data=best_features.sort_values(by="importance", ascending=False))
             plt.xlabel("importance of each feature")
-            plt.title('AUC={:.3f} ({}-folds)'.format(auc,n_fold));
+            plt.title('AUC={:.3f} ({}-folds)'.format(auc,n_fold))
+            plt.savefig("./result/_importance_[{}].jpg".format(features))
             plt.show()
 
     ROC_plot(features,X, y, y_pred, "")

@@ -45,17 +45,17 @@ class TumorSamples(DetectionSet):
 
     def EDA(self):
         if True:
-            self.df = self.df[self.df['id'].notnull()].reset_index(drop=True)
-            self.df.fillna(0.0, inplace=True)
-            self.df['in_hospital'] = self.df.apply(lambda x: len(x['id']) <= 6, axis=1)
-            print(self.df['in_hospital'].value_counts())
-            for col in self.df.columns:
+            df_EDA = self.df[self.df['id'].notnull()].reset_index(drop=True)
+            df_EDA.fillna(0.0, inplace=True)
+            df_EDA['in_hospital'] = df_EDA.apply(lambda x: len(x['id']) <= 6, axis=1)
+            print(df_EDA['in_hospital'].value_counts())
+            for col in df_EDA.columns:
                 if col in ['id','date','sex','in_hospital']:
                     continue
 
-                self.df[col] = self.df[col].astype(np.float)
-                sns.FacetGrid(self.df, hue="in_hospital", height=5).map(sns.distplot, col).add_legend();
-                #sns.distplot(self.df[col],kde=False )
+                df_EDA[col] = df_EDA[col].astype(np.float)
+                sns.FacetGrid(df_EDA, hue="in_hospital", height=5).map(sns.distplot, col).add_legend();
+                #sns.distplot(df_EDA[col],kde=False )
                 path = "./result/hospital_{}.jpg".format(col.replace('/' , '_'))
                 plt.savefig(path)
                 plt.show();
@@ -100,6 +100,8 @@ class TumorSamples(DetectionSet):
             return k_id, k_val
         try:
             k_id,k_val=tect_tokens[0],(float)(tect_tokens[1])
+            assert(k_val>0)
+            k_val = np.log(k_val)
         except:
             return k_id, k_val
         isUpdate = source == "LSW"
@@ -206,10 +208,15 @@ class TumorSamples(DetectionSet):
         self.y = df_valid['in_hospital'].astype(np.int)
 
         cols = df_valid.columns
-        x_cols = [e for e in cols if e not in ('id', 'date', 'sex', 'in_hospital')]
-                                               #'PSA','NSE','CA211','HE4','AFP.','SCCA','CA153','CA724')]
+        #x_cols = [e for e in cols if e not in ('id', 'date', 'sex', 'in_hospital')]
+        #sugestion by Dr.Lin
+        #x_cols = [e for e in cols if e in ('age', 'CA199','CYFRA211', 'AFP.')]
+        x_cols = [e for e in cols if e in ('age', 'CA199', 'CA125', 'CYFRA211', 'PSA', 'NSE')]
+
+
         self.X = df_valid[x_cols].astype(np.float)
-        self.X['sex'] = df_valid['sex'].astype('category')
+        #self.X['sex'] = df_valid['sex'].astype('category')
+        self.X['sex'] = df_valid.apply(lambda x: 0 if x['sex']=='M' else 1, axis=1)
         print("HospitalOnID X=[{}],y={}".format(self.X.shape,self.y.shape ))
         return
 
